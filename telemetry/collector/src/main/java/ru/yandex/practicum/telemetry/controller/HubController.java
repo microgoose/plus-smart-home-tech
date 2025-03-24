@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.telemetry.model.hub.HubEvent;
 import ru.yandex.practicum.telemetry.model.sensor.SensorEvent;
+import ru.yandex.practicum.telemetry.service.HubService;
 import ru.yandex.practicum.telemetry.service.SensorService;
 
 @Slf4j
@@ -18,6 +19,7 @@ import ru.yandex.practicum.telemetry.service.SensorService;
 public class HubController {
 
     private final SensorService sensorService;
+    private final HubService hubService;
 
     @PostMapping("/sensors")
     public void collectSensorEvent(@Valid @RequestBody SensorEvent event) {
@@ -28,5 +30,6 @@ public class HubController {
     @PostMapping("/hubs")
     public void collectHubEvent(@Valid @RequestBody HubEvent event) {
         log.info("Received data from hub: {}", event);
+        hubService.collectSensorEvent(event);
     }
 }

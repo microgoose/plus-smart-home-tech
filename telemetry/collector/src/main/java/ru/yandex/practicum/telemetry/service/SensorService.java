@@ -11,6 +11,8 @@ import ru.yandex.practicum.telemetry.model.sensor.SensorEvent;
 
 import java.util.concurrent.CompletableFuture;
 
+import static ru.yandex.practicum.telemetry.config.KafkaTopicsConfig.SENSOR_EVENT_TOPIC;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class SensorService {
     public void collectSensorEvent(SensorEvent event) {
         SensorEventAvro sensorEventAvro = SensorEventAvroMapper.mapSensorEvent(event);
         CompletableFuture<SendResult<String, SensorEventAvro>> future =
-                kafkaTemplate.send("telemetry.sensors.v1", sensorEventAvro.getHubId(), sensorEventAvro);
+                kafkaTemplate.send(SENSOR_EVENT_TOPIC, sensorEventAvro.getHubId(), sensorEventAvro);
 
         future.whenComplete((result, ex) -> {
            if (ex != null) {

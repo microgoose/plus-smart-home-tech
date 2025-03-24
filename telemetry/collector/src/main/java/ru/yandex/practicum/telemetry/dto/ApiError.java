@@ -6,6 +6,7 @@ import ru.yandex.practicum.telemetry.config.DateConfig;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 public class ApiError {
@@ -24,7 +25,7 @@ public class ApiError {
     }
 
     private List<String> acceptStackTrace(Throwable ex) {
-        return List.of(ex.getStackTrace()).stream()
+        return Stream.of(ex.getStackTrace())
                 .map(StackTraceElement::toString)
                 .collect(Collectors.toList());
     }
