@@ -29,10 +29,10 @@ import java.time.Instant;
 @ToString
 public abstract class SensorEvent {
     @NotBlank
-    private String id;
+    protected String id;
     @NotBlank
-    private String hubId;
-    private Instant timestamp = Instant.now();
+    protected String hubId;
+    protected Instant timestamp = Instant.now();
 
     @NotNull
     public abstract SensorEventType getType();

@@ -11,6 +11,12 @@ import ru.yandex.practicum.telemetry.enums.SensorEventType;
 public class SwitchSensorEvent extends SensorEvent {
     private Boolean state;
 
+    public SwitchSensorEvent(String id, String hubId, Boolean state) {
+        this.id = id;
+        this.hubId = hubId;
+        this.state = state;
+    }
+
     @Override
     public SensorEventType getType() {
         return SensorEventType.SWITCH_SENSOR_EVENT;

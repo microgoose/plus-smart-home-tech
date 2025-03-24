@@ -23,10 +23,8 @@ import java.time.Instant;
 @Getter
 @Setter
 public abstract class HubEvent {
-    private String id;
-    private String hubId;
-    private Instant timestamp = Instant.now();
-    private HubEventType type;
+    protected String hubId;
+    protected Instant timestamp = Instant.now();
 
     public abstract HubEventType getType();
 }

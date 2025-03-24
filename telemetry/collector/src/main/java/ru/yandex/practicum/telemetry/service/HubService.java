@@ -20,7 +20,7 @@ public class HubService {
 
     private final KafkaTemplate<String, HubEventAvro> kafkaTemplate;
 
-    public void collectSensorEvent(HubEvent event) {
+    public void collectHubEvent(HubEvent event) {
         HubEventAvro hubEventAvro = HubEventAvroMapper.mapSensorEvent(event);
         CompletableFuture<SendResult<String, HubEventAvro>> future =
                 kafkaTemplate.send(HUB_EVENT_TOPIC, event.getType().name(), hubEventAvro);

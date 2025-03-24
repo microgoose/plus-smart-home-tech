@@ -13,6 +13,14 @@ public class ClimateSensorEvent extends SensorEvent {
     private int humidity;
     private int co2Level;
 
+    public ClimateSensorEvent(String id, String hubId, Integer temperatureC, Integer humidity, Integer co2Level) {
+        this.id = id;
+        this.hubId = hubId;
+        this.temperatureC = temperatureC;
+        this.humidity = humidity;
+        this.co2Level = co2Level;
+    }
+
     @Override
     public SensorEventType getType() {
         return SensorEventType.CLIMATE_SENSOR_EVENT;

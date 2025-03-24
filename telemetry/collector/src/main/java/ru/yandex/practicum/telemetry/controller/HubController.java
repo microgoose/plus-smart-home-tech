@@ -30,6 +30,6 @@ public class HubController {
     @PostMapping("/hubs")
     public void collectHubEvent(@Valid @RequestBody HubEvent event) {
         log.info("Received data from hub: {}", event);
-        hubService.collectSensorEvent(event);
+        hubService.collectHubEvent(event);
     }
 }

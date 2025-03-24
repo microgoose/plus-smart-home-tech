@@ -3,6 +3,9 @@ package ru.yandex.practicum.telemetry.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.telemetry.dto.ApiError;
@@ -14,8 +17,23 @@ import java.io.StringWriter;
 @RestControllerAdvice
 public class ErrorHandler {
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiError> handleHttpMessageNotReadable(final HttpMessageNotReadableException ex) {
+        return buildErrorResponse(ex, HttpStatus.BAD_REQUEST, "Got 400 status Bad Request");
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiError> handleHttpMessageNotReadable(final MethodArgumentNotValidException ex) {
+        return buildErrorResponse(ex, HttpStatus.BAD_REQUEST, "Got 400 status Bad Request");
+    }
+
+    @ExceptionHandler(HttpMessageConversionException.class)
+    public ResponseEntity<ApiError> handleHttpMessageNotReadable(final HttpMessageConversionException ex) {
+        return buildErrorResponse(ex, HttpStatus.BAD_REQUEST, "Got 400 status Bad Request");
+    }
+
     @ExceptionHandler
-    public ResponseEntity<ApiError> handlerOtherException(Exception e) {
+    public ResponseEntity<ApiError> handlerOtherException(final Exception e) {
         return buildErrorResponse(e, HttpStatus.INTERNAL_SERVER_ERROR, "Got 500 status Internal server error");
     }
 
