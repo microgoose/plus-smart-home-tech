@@ -9,6 +9,7 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.telemetry.maper.SensorEventAvroMapper;
 import ru.yandex.practicum.telemetry.model.sensor.SensorEvent;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import static ru.yandex.practicum.telemetry.config.KafkaTopicsConfig.SENSOR_EVENT_TOPIC;
@@ -23,10 +24,10 @@ public class SensorService {
     public void collectSensorEvent(SensorEvent event) {
         SensorEventAvro sensorEventAvro = SensorEventAvroMapper.mapSensorEvent(event);
         CompletableFuture<SendResult<String, SensorEventAvro>> future =
-                kafkaTemplate.send(SENSOR_EVENT_TOPIC, sensorEventAvro.getHubId(), sensorEventAvro);
+                kafkaTemplate.send(SENSOR_EVENT_TOPIC.getTopic(), sensorEventAvro.getHubId(), sensorEventAvro);
 
         future.whenComplete((result, ex) -> {
-           if (ex != null) {
+           if (Objects.nonNull(ex)) {
                log.error(ex.getMessage(), ex);
            }
         });

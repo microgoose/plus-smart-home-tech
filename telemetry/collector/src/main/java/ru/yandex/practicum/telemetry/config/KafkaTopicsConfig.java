@@ -1,6 +1,15 @@
 package ru.yandex.practicum.telemetry.config;
 
-public class KafkaTopicsConfig {
-    public static final String SENSOR_EVENT_TOPIC = "telemetry.sensors.v1";
-    public static final String HUB_EVENT_TOPIC = "telemetry.hubs.v1";
+import lombok.Getter;
+
+@Getter
+public enum KafkaTopicsConfig {
+    SENSOR_EVENT_TOPIC("telemetry.sensors.v1"),
+    HUB_EVENT_TOPIC("telemetry.hubs.v1");
+
+    private final String topic;
+
+    KafkaTopicsConfig(String topic) {
+        this.topic = topic;
+    }
 }
