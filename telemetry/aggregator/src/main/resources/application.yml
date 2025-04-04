@@ -1,5 +1,5 @@
 kafka:
-  bootstrap-servers: localhost:9092
+  bootstrap-servers: localhost:8082
 
   topics:
     sensors: telemetry.sensors.v1
@@ -8,12 +8,12 @@ kafka:
   consumer:
     group-id: telemetry-aggregator-group
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: ru.yandex.practicum.kafka.deserializer.SensorEventDeserializer
+    value-deserializer: ru.yandex.practicum.deserializer.SensorEventDeserializer
     auto-offset-reset: earliest
 
   producer:
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    value-serializer: ru.yandex.practicum.kafka.serializer.SensorSnapshotSerializer
+    value-serializer: ru.yandex.practicum.serializer.GeneralAvroSerializer
 
   listener:
     ack-mode: manual
