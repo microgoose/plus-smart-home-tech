@@ -3,64 +3,69 @@ package ru.yandex.practicum.telemetry.aggregator.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
-import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
-import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
+import ru.yandex.practicum.kafka.telemetry.event.*;
 
-import java.util.HashMap;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class SensorSnapshotService {
 
-    private final Map<String, SensorsSnapshotAvro> snapshots = new HashMap<>();
+    private final Map<String, SensorsSnapshotAvro> snapshots = new ConcurrentHashMap<>();
 
-    /**
-     * Обновляет снапшот по новому событию.
-     * Возвращает обновленный снапшот, если данные изменились.
-     */
     public Optional<SensorsSnapshotAvro> updateState(SensorEventAvro event) {
         String hubId = event.getHubId();
         String sensorId = event.getId();
+        Instant eventTimestamp = event.getTimestamp();
+        Object newPayload = event.getPayload();
 
-        // Получаем снапшот хаба или создаем новый
+        if (newPayload == null || !isSupportedSensorType(newPayload)) {
+            log.warn("Пропущено событие с неподдерживаемым payload: {}", event);
+            return Optional.empty();
+        }
+
         SensorsSnapshotAvro snapshot = snapshots.computeIfAbsent(hubId, key ->
                 SensorsSnapshotAvro.newBuilder()
                         .setHubId(hubId)
-                        .setTimestamp(event.getTimestamp())
-                        .setSensorsState(new HashMap<>())
+                        .setTimestamp(eventTimestamp)
+                        .setSensorsState(new ConcurrentHashMap<>())
                         .build()
         );
 
-        // Получаем старое состояние сенсора (если есть)
-        SensorStateAvro oldState = snapshot.getSensorsState().get(sensorId);
+        SensorStateAvro previousState = snapshot.getSensorsState().get(sensorId);
 
-        // Если есть старое состояние, проверяем, нужно ли обновлять
-        if (oldState != null) {
-            if (!event.getTimestamp().isAfter(oldState.getTimestamp())) {
-                log.info("Пропускаем событие: {} (старее или равно текущему)", event);
-                return Optional.empty();
-            }
-            if (oldState.getData().equals(event.getPayload())) {
-                log.info("Пропускаем событие: {} (данные не изменились)", event);
+        if (previousState != null) {
+            boolean isPreviousNewer = previousState.getTimestamp().isAfter(eventTimestamp);
+            boolean isDataSame = previousState.getData().equals(newPayload);
+
+            if (isPreviousNewer || isDataSame) {
+                log.debug("Пропускаем событие: {}",
+                        isPreviousNewer ? "устаревший timestamp" : "данные не изменились");
                 return Optional.empty();
             }
         }
 
-        // Обновляем состояние сенсора
         SensorStateAvro newState = SensorStateAvro.newBuilder()
-                .setTimestamp(event.getTimestamp())
-                .setData(event.getPayload())
+                .setTimestamp(eventTimestamp)
+                .setData(newPayload)
                 .build();
-
         snapshot.getSensorsState().put(sensorId, newState);
-        snapshot.setTimestamp(event.getTimestamp());
+
+        snapshot.setTimestamp(eventTimestamp);
 
         log.info("Обновили снапшот для хаба {}: {}", hubId, snapshot);
-
         return Optional.of(snapshot);
+    }
+
+    private boolean isSupportedSensorType(Object payload) {
+        return payload instanceof ClimateSensorAvro ||
+                payload instanceof LightSensorAvro ||
+                payload instanceof MotionSensorAvro ||
+                payload instanceof SwitchSensorAvro ||
+                payload instanceof TemperatureSensorAvro;
     }
 }

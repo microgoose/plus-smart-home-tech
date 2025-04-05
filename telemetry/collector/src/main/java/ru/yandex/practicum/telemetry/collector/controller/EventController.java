@@ -16,7 +16,7 @@ import ru.yandex.practicum.telemetry.collector.service.SensorService;
 @GrpcService
 @Slf4j
 @RequiredArgsConstructor
-public class HubController extends CollectorControllerGrpc.CollectorControllerImplBase {
+public class EventController extends CollectorControllerGrpc.CollectorControllerImplBase {
 
     private final HubService hubService;
     private final SensorService sensorService;
