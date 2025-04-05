@@ -1,5 +1,5 @@
 kafka:
-  bootstrap-servers: localhost:8082
+  bootstrap-servers: localhost:9092
 
   topics:
     sensors: telemetry.sensors.v1
@@ -14,6 +14,3 @@ kafka:
   producer:
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
     value-serializer: ru.yandex.practicum.serializer.GeneralAvroSerializer
-
-  listener:
-    ack-mode: manual
