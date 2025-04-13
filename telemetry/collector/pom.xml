@@ -79,6 +79,11 @@
             <artifactId>spring-retry</artifactId>
         </dependency>
         <!-- Cloud Config / Externalized Configuration       -->
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
