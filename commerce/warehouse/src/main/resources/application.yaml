@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: analyzer
+    name: warehouse
   config:
     import: "configserver:"
   cloud:
