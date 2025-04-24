@@ -2,6 +2,7 @@ package ru.yandex.practicum.dto.store;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -17,5 +18,5 @@ public class ProductDto {
     private String quantityState;
     private String productState;
     private String productCategory;
-    private double price;
+    private BigDecimal price;
 }

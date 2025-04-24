@@ -40,11 +40,11 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=smart_home
+      - POSTGRES_DB=smart_home_db
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "smart_home", "-U", "analyzer" ]
+      test: [ "CMD", "pg_isready", "-q", "-d", "smart_home_db", "-U", "user" ]
       timeout: 5s
       interval: 5s
       retries: 10
