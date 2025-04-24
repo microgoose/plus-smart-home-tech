@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS shopping_cart;
 SET search_path TO shopping_cart;
 
 -- shopping_cart: Корзина пользователя
-CREATE TABLE shopping_cart (
+CREATE TABLE IF NOT EXISTS shopping_cart (
     id UUID PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     active BOOLEAN NOT NULL DEFAULT true,
@@ -12,7 +12,7 @@ CREATE TABLE shopping_cart (
 );
 
 -- shopping_cart_item: Позиции товаров в корзине
-CREATE TABLE shopping_cart_item (
+CREATE TABLE IF NOT EXISTS shopping_cart_item (
     id UUID PRIMARY KEY,
     cart_id UUID NOT NULL REFERENCES shopping_cart(id) ON DELETE CASCADE,
     product_id UUID NOT NULL,

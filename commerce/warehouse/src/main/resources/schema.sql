@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS warehouse;
 SET search_path TO warehouse;
 
 -- Таблица хранения товаров
-CREATE TABLE product (
+CREATE TABLE IF NOT EXISTS product (
      product_id UUID PRIMARY KEY,
      fragile BOOLEAN NOT NULL,
      weight DOUBLE PRECISION NOT NULL CHECK (weight > 0),
@@ -14,4 +14,4 @@ CREATE TABLE product (
 );
 
 -- Индекс на количество, если будет нужна сортировка или агрегация
-CREATE INDEX idx_product_quantity ON product(quantity);
+CREATE INDEX IF NOT EXISTS idx_product_quantity ON product(quantity);

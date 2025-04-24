@@ -26,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getProductsByCategory(ProductCategory category, Pageable pageable) {
-        var pageRequest = PageRequest.of(pageable.getPage(), pageable.getSize());
+        PageRequest pageRequest = PageRequest.of(pageable.getPage(), pageable.getSize());
         return productRepository
                 .findByProductCategoryAndProductState(category, ProductState.ACTIVE, pageRequest)
                 .map(productMapper::toDto)

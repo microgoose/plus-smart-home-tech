@@ -1,4 +1,5 @@
 server:
+#  port: 38081
   port: 0
 
 spring:
