@@ -5,6 +5,7 @@ import ru.yandex.practicum.dto.ApiError;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ApiErrorResponseMapper {
@@ -22,7 +23,7 @@ public class ApiErrorResponseMapper {
     }
 
     private static ApiError buildCause(Throwable cause) {
-        if (cause == null) return null;
+        if (Objects.isNull(cause)) return null;
 
         return ApiError.builder()
                 .message(cause.getMessage())
@@ -37,7 +38,7 @@ public class ApiErrorResponseMapper {
     }
 
     private static List<ApiError> convertSuppressed(Throwable[] suppressed) {
-        if (suppressed == null) return null;
+        if (Objects.isNull(suppressed)) return null;
 
         return Arrays.stream(suppressed)
                 .map(s -> ApiError.builder()

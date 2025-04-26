@@ -7,11 +7,13 @@ import ru.yandex.practicum.model.store.ProductCategory;
 import ru.yandex.practicum.model.store.ProductState;
 import ru.yandex.practicum.model.store.QuantityState;
 
+import java.util.Objects;
+
 @Component
 public class ProductMapper {
 
     public ProductDto toDto(Product product) {
-        if (product == null) {
+        if (Objects.isNull(product)) {
             return null;
         }
 
@@ -28,7 +30,7 @@ public class ProductMapper {
     }
 
     public Product toEntity(ProductDto dto) {
-        if (dto == null) {
+        if (Objects.isNull(dto)) {
             return null;
         }
 

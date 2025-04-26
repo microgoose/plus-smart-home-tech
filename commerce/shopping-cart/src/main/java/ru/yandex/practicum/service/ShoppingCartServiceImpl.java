@@ -51,13 +51,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new NotAuthorizedUserException("Missing username");
         }
 
-        if (productsToAdd == null || productsToAdd.isEmpty()) {
+        if (Objects.isNull(productsToAdd) || productsToAdd.isEmpty()) {
             throw new NoProductsInShoppingCartException("Cart list cannot be null or empty");
         }
 
         ShoppingCart cart = cartRepository.findByUsernameAndActiveTrue(username).orElse(null);
 
-        if (cart == null) {
+        if (Objects.isNull(cart)) {
             cart = ShoppingCart.builder()
                     .id(UUID.randomUUID())
                     .username(username)
