@@ -35,6 +35,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public ShoppingCartDto getCart(UUID uuid) {
+        return cartMapper.toDto(cartRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException(uuid + ": not found")));
+    }
+
+    @Override
     @Transactional
     public void deactivateCart(String username) {
         ShoppingCart cart = cartRepository.findByUsernameAndActiveTrue(username)
@@ -72,8 +79,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new IllegalStateException("Cart is deactivated");
         }
 
-        warehouseClient.checkProductAvailability(cartMapper.toDto(cart));
-
         for (Map.Entry<UUID, Long> entry : productsToAdd.entrySet()) {
             UUID productId = entry.getKey();
             long quantity = entry.getValue();
@@ -94,6 +99,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             item.setQuantity(item.getQuantity() + quantity);
             cart.getItems().add(item);
         }
+
+        warehouseClient.checkProductAvailability(cartMapper.toDto(cart));
 
         return cartMapper.toDto(cartRepository.save(cart));
     }

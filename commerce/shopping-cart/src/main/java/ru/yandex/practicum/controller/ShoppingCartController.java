@@ -27,6 +27,14 @@ public class ShoppingCartController {
     }
 
     /**
+     * Получить корзину пользователя.
+     */
+    @GetMapping("/id")
+    public ResponseEntity<ShoppingCartDto> getCartById(@RequestParam UUID uuid) {
+        return ResponseEntity.ok(shoppingCartService.getCart(uuid));
+    }
+
+    /**
      * Добавить товары в корзину.
      */
     @PutMapping

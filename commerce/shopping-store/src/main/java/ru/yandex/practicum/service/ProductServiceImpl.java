@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.dto.Pageable;
+import ru.yandex.practicum.dto.common.Pageable;
 import ru.yandex.practicum.dto.store.ProductDto;
 import ru.yandex.practicum.dto.store.SetProductQuantityStateRequest;
 import ru.yandex.practicum.mapper.ProductMapper;
@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto updateProduct(ProductDto productDto) {
         Product product = productRepository.findById(productDto.getProductId())
-                .orElseThrow(() -> new EntityNotFoundException("Product not found: " + productDto.getProductId()));
+                .orElseThrow(() -> new EntityNotFoundException("Товар не найден: " + productDto.getProductId()));
 
         product.setProductName(productDto.getProductName());
         product.setDescription(productDto.getDescription());
@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean removeProduct(UUID productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found: " + productId));
+                .orElseThrow(() -> new EntityNotFoundException("Товар не найден: " + productId));
         product.setProductState(ProductState.DEACTIVATE);
         productRepository.save(product);
         return true;
@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean setProductQuantityState(SetProductQuantityStateRequest request) {
         Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new EntityNotFoundException("Product not found: " + request.getProductId()));
+                .orElseThrow(() -> new EntityNotFoundException("Товар не найден: " + request.getProductId()));
         product.setQuantityState(QuantityState.valueOf(request.getQuantityState()));
         productRepository.save(product);
         return true;
@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto getProductById(UUID productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found: " + productId));
+                .orElseThrow(() -> new EntityNotFoundException("Товар не найден: " + productId));
         return productMapper.toDto(product);
     }
 }

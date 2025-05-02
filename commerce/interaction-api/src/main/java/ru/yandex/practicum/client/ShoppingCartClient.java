@@ -18,6 +18,9 @@ public interface ShoppingCartClient {
     @GetMapping
     ShoppingCartDto getCart(@RequestParam("username") String username);
 
+    @GetMapping("/id")
+    ShoppingCartDto getCart(@RequestParam("uuid") UUID uuid);
+
     @PutMapping
     ShoppingCartDto addProducts(
         @RequestParam("username") String username,

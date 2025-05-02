@@ -16,6 +16,8 @@ public class ShoppingCartDto {
 
     private UUID shoppingCartId;
 
+    private String username;
+
     /**
      * Ключ: productId, Значение: quantity
      */

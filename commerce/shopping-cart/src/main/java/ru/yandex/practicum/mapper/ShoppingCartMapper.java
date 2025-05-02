@@ -14,6 +14,7 @@ public class ShoppingCartMapper {
 
     public ShoppingCartDto toDto(ShoppingCart cart) {
         return ShoppingCartDto.builder()
+                .username(cart.getUsername())
                 .shoppingCartId(cart.getId())
                 .products(mapItems(cart))
                 .build();

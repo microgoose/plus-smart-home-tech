@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.dto.cart.ShoppingCartDto;
-import ru.yandex.practicum.dto.warehouse.AddProductToWarehouseRequest;
-import ru.yandex.practicum.dto.warehouse.AddressDto;
-import ru.yandex.practicum.dto.warehouse.BookedProductsDto;
-import ru.yandex.practicum.dto.warehouse.NewProductInWarehouseRequest;
+import ru.yandex.practicum.dto.common.AddressDto;
+import ru.yandex.practicum.dto.warehouse.*;
+
+import java.util.Map;
+import java.util.UUID;
 
 @FeignClient(name = "warehouse", path = "/api/v1/warehouse")
 public interface WarehouseClient {
@@ -37,4 +38,23 @@ public interface WarehouseClient {
      */
     @PutMapping
     void registerNewProduct(@RequestBody NewProductInWarehouseRequest request);
+
+    /**
+     * Отправить товары в доставку (привязать deliveryId к заказу).
+     */
+    @PostMapping("/shipped")
+    void shippedToDelivery(@RequestBody ShippedToDeliveryRequest request);
+
+    /**
+     * Вернуть товары на склад (увеличить остатки).
+     */
+    @PostMapping("/return")
+    void acceptReturn(@RequestBody Map<UUID, Integer> returnedProducts);
+
+    /**
+     * Собрать заказ — забронировать товары под заказ и уменьшить остатки.
+     */
+    @PostMapping("/assembly")
+    BookedProductsDto assemblyProductsForOrder(@RequestBody AssemblyProductsForOrderRequest request);
+
 }

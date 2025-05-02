@@ -1,10 +1,11 @@
 package ru.yandex.practicum.controller;
 
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.yandex.practicum.dto.ApiError;
+import ru.yandex.practicum.dto.common.ApiError;
 import ru.yandex.practicum.exception.NoProductsInShoppingCartException;
 import ru.yandex.practicum.exception.NotAuthorizedUserException;
 import ru.yandex.practicum.mapper.ApiErrorResponseMapper;
@@ -22,6 +23,19 @@ public class CartExceptionHandler {
     public ResponseEntity<ApiError> handleEmptyCart(NoProductsInShoppingCartException ex) {
         ApiError error = ApiErrorResponseMapper.toApiError(ex, HttpStatus.BAD_REQUEST, "Нет запрошенных товаров в корзине");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ApiError> handle(FeignException ex) {
+        ApiError error;
+
+        try {
+            error = ApiErrorResponseMapper.fromJson(ex.contentUTF8());
+        } catch (Exception ignore) {
+            error = ApiErrorResponseMapper.toApiError(ex, HttpStatus.valueOf(ex.status()), "Неизвестная ошибка");
+        }
+
+        return ResponseEntity.status(ex.status()).body(error);
     }
 
     @ExceptionHandler(Exception.class)
