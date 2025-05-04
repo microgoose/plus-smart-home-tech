@@ -1,0 +1,23 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations:
+            - classpath:config/telemetry/{application}
+            - classpath:config/commerce/{application}
+
+eureka:
+  instance:
+    preferIpAddress: true  # Регистрировать IP вместо hostname
+    instanceId: ${spring.application.name}:${random.value}  # Уникальный ID
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
