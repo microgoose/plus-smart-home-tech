@@ -17,7 +17,7 @@ public class OrderMapper {
     public AssemblyProductsForOrderRequest toAssemblyRequest(Order order) {
         return AssemblyProductsForOrderRequest.builder()
                 .orderId(order.getOrderId())
-                .products(order.getProducts())
+                .productsQuantity(order.getProductsQuantity())
                 .build();
     }
 
@@ -27,8 +27,8 @@ public class OrderMapper {
                 .shoppingCartId(dto.getShoppingCartId())
                 .paymentId(dto.getPaymentId())
                 .deliveryId(dto.getDeliveryId())
-                .state(OrderState.valueOf(dto.getState()))
-                .products(dto.getProducts())
+                .state(dto.getState())
+                .productsQuantity(dto.getProductsQuantity())
                 .deliveryWeight(dto.getDeliveryWeight() != null ? dto.getDeliveryWeight() : 0.0)
                 .deliveryVolume(dto.getDeliveryVolume() != null ? dto.getDeliveryVolume() : 0.0)
                 .fragile(dto.getFragile() != null && dto.getFragile())
@@ -44,10 +44,10 @@ public class OrderMapper {
         return OrderDto.builder()
                 .orderId(order.getOrderId())
                 .shoppingCartId(order.getShoppingCartId())
-                .products(order.getProducts())
+                .productsQuantity(order.getProductsQuantity())
                 .paymentId(order.getPaymentId())
                 .deliveryId(order.getDeliveryId())
-                .state(order.getState().name())  // enum to string
+                .state(order.getState())
                 .deliveryWeight(order.getDeliveryWeight())
                 .deliveryVolume(order.getDeliveryVolume())
                 .fragile(order.isFragile())
@@ -67,8 +67,8 @@ public class OrderMapper {
         return OrderDto.builder()
                 .orderId(null) // ещё не создан
                 .shoppingCartId(request.getShoppingCart().getShoppingCartId())
-                .products(request.getShoppingCart().getProducts())
-                .state(OrderState.NEW.name())
+                .productsQuantity(request.getShoppingCart().getProductsQuantity())
+                .state(OrderState.NEW)
                 .build();
     }
 }

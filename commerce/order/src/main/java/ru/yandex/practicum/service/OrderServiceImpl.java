@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
                 .orderId(UUID.randomUUID())
                 .username(cart.getUsername())
                 .shoppingCartId(cart.getShoppingCartId())
-                .products(cart.getProducts())
+                .productsQuantity(cart.getProductsQuantity())
                 .deliveryWeight(booking.getDeliveryWeight())
                 .deliveryVolume(booking.getDeliveryVolume())
                 .fragile(booking.isFragile())

@@ -8,6 +8,7 @@ import ru.yandex.practicum.dto.order.OrderDto;
 import ru.yandex.practicum.exception.NoDeliveryFoundException;
 import ru.yandex.practicum.mapper.DeliveryMapper;
 import ru.yandex.practicum.model.Delivery;
+import ru.yandex.practicum.model.DeliveryTariff;
 import ru.yandex.practicum.model.delivery.DeliveryStatus;
 import ru.yandex.practicum.repository.DeliveryRepository;
 
@@ -59,10 +60,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public double calculateDeliveryCost(OrderDto orderDto) {
-        final double baseCost = 5.0;
-        double result = baseCost;
+        double result = DeliveryTariff.BASE_COST.getValue();
 
-        // ADDRESS_1 -> *1, ADDRESS_2 -> *2 + baseCost
         if (orderDto.getDeliveryId() != null) {
             Delivery delivery = deliveryRepository.findById(orderDto.getDeliveryId())
                     .orElseThrow(() -> new NoDeliveryFoundException("Delivery not found for id: " + orderDto.getDeliveryId()));
@@ -70,19 +69,19 @@ public class DeliveryServiceImpl implements DeliveryService {
             String destinationStreet = delivery.getToAddress().getStreet();
 
             if (warehouseStreet.contains("ADDRESS_2")) {
-                result *= 2;
-                result += baseCost;
+                result *= DeliveryTariff.ADDRESS_2_MULTIPLIER.getValue();
+                result += DeliveryTariff.BASE_COST.getValue();
             }
 
-            if (orderDto.getFragile() != null && orderDto.getFragile()) {
-                result += result * 0.2;
+            if (Boolean.TRUE.equals(orderDto.getFragile())) {
+                result += result * DeliveryTariff.FRAGILE_SURCHARGE_PERCENT.getValue();
             }
 
-            result += orderDto.getDeliveryWeight() * 0.3;
-            result += orderDto.getDeliveryVolume() * 0.2;
+            result += orderDto.getDeliveryWeight() * DeliveryTariff.WEIGHT_MULTIPLIER.getValue();
+            result += orderDto.getDeliveryVolume() * DeliveryTariff.VOLUME_MULTIPLIER.getValue();
 
             if (!warehouseStreet.equalsIgnoreCase(destinationStreet)) {
-                result += result * 0.2;
+                result += result * DeliveryTariff.DIFFERENT_STREET_SURCHARGE_PERCENT.getValue();
             }
         }
 

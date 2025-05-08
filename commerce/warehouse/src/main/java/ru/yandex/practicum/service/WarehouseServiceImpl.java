@@ -64,7 +64,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         double totalVolume = 0;
         boolean hasFragile = false;
 
-        for (Map.Entry<UUID, Long> entry : cart.getProducts().entrySet()) {
+        for (Map.Entry<UUID, Long> entry : cart.getProductsQuantity().entrySet()) {
             UUID productId = entry.getKey();
             long requestedQuantity = entry.getValue();
 
@@ -104,7 +104,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         double totalVolume = 0;
         boolean fragile = false;
 
-        for (Map.Entry<UUID, Long> entry : request.getProducts().entrySet()) {
+        for (Map.Entry<UUID, Long> entry : request.getProductsQuantity().entrySet()) {
             UUID productId = entry.getKey();
             Long quantity = entry.getValue();
 

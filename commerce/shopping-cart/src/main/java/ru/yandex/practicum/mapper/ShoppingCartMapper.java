@@ -16,7 +16,7 @@ public class ShoppingCartMapper {
         return ShoppingCartDto.builder()
                 .username(cart.getUsername())
                 .shoppingCartId(cart.getId())
-                .products(mapItems(cart))
+                .productsQuantity(mapItems(cart))
                 .build();
     }
 

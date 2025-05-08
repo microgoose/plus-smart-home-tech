@@ -2,6 +2,7 @@ package ru.yandex.practicum.dto.order;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.yandex.practicum.model.order.OrderState;
 
 import java.util.Map;
 import java.util.UUID;
@@ -12,11 +13,11 @@ public class OrderDto {
 
     private UUID orderId;
     private UUID shoppingCartId;
-    private Map<UUID, Long> products; // <productId, quantity>
+    private Map<UUID, Long> productsQuantity;
     private UUID paymentId;
     private UUID deliveryId;
 
-    private String state; // Возможные значения: NEW, ON_PAYMENT, ON_DELIVERY, DONE, и др.
+    private OrderState state;
 
     private Double deliveryWeight;
     private Double deliveryVolume;

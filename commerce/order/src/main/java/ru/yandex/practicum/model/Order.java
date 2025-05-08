@@ -45,7 +45,7 @@ public class Order {
     )
     @MapKeyColumn(name = "product_id")
     @Column(name = "quantity", nullable = false)
-    private Map<UUID, Long> products;
+    private Map<UUID, Long> productsQuantity;
 
     @Column(name = "delivery_weight")
     private double deliveryWeight;

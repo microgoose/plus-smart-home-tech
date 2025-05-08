@@ -26,7 +26,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public double calculateProductCost(OrderDto orderDto) {
-        Map<UUID, Long> products = orderDto.getProducts();
+        Map<UUID, Long> products = orderDto.getProductsQuantity();
         return products.entrySet().stream()
                 .map(entry -> {
                     BigDecimal price = storeClient.getProduct(entry.getKey()).getPrice();
