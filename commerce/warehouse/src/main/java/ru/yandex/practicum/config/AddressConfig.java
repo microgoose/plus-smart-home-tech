@@ -2,7 +2,7 @@ package ru.yandex.practicum.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.yandex.practicum.dto.warehouse.AddressDto;
+import ru.yandex.practicum.dto.common.AddressDto;
 
 import java.security.SecureRandom;
 

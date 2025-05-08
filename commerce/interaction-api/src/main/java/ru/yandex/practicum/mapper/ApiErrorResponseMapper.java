@@ -1,7 +1,8 @@
 package ru.yandex.practicum.mapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
-import ru.yandex.practicum.dto.ApiError;
+import ru.yandex.practicum.dto.common.ApiError;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +10,17 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ApiErrorResponseMapper {
+
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    public static ApiError fromJson(String json) {
+        try {
+            return OBJECT_MAPPER.readValue(json, ApiError.class);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Ошибка при разборе ApiError из JSON: " + json, e);
+        }
+    }
 
     public static ApiError toApiError(Exception ex, HttpStatus status, String userMessage) {
         return ApiError.builder()

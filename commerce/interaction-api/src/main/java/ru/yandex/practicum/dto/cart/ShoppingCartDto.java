@@ -15,9 +15,6 @@ import java.util.UUID;
 public class ShoppingCartDto {
 
     private UUID shoppingCartId;
-
-    /**
-     * Ключ: productId, Значение: quantity
-     */
-    private Map<UUID, Long> products;
+    private String username;
+    private Map<UUID, Long> productsQuantity;
 }

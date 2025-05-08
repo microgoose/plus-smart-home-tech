@@ -1,10 +1,11 @@
 package ru.yandex.practicum.controller;
 
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.yandex.practicum.dto.ApiError;
+import ru.yandex.practicum.dto.common.ApiError;
 import ru.yandex.practicum.exception.ProductNotFoundException;
 import ru.yandex.practicum.mapper.ApiErrorResponseMapper;
 
@@ -15,6 +16,19 @@ public class StorelExceptionHandler {
     public ResponseEntity<ApiError> handleProductNotFound(ProductNotFoundException ex) {
         ApiError error = ApiErrorResponseMapper.toApiError(ex, HttpStatus.NOT_FOUND, "Товар не найден");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ApiError> handle(FeignException ex) {
+        ApiError error;
+
+        try {
+            error = ApiErrorResponseMapper.fromJson(ex.contentUTF8());
+        } catch (Exception ignore) {
+            error = ApiErrorResponseMapper.toApiError(ex, HttpStatus.valueOf(ex.status()), "Неизвестная ошибка");
+        }
+
+        return ResponseEntity.status(ex.status()).body(error);
     }
 
     @ExceptionHandler(Exception.class)

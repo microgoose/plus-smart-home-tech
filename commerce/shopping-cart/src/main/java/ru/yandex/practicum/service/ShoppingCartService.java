@@ -15,6 +15,11 @@ public interface ShoppingCartService {
     ShoppingCartDto getCart(String username);
 
     /**
+     * Получить корзину.
+     */
+    ShoppingCartDto getCart(UUID uuid);
+
+    /**
      * Добавить товары в корзину пользователя.
      */
     ShoppingCartDto addProducts(String username, Map<UUID, Long> productsToAdd);
